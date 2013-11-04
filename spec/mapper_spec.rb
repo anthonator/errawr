@@ -22,11 +22,6 @@ describe Errawr::Mapper do
     it 'should throw an error if base class is not a subclass of Errawr::Error' do
       expect { Errawr.register!(:dummy_error, { error: { base_class: StandardError } }) }.to raise_error(ArgumentError)
     end
-  
-    it 'should override error name if error_name options is passed' do
-      Errawr.register!(:dummy_error, { error: { name: :same_dummy_error } })
-      Errawr::Mapper[:dummy_error].name.should == :same_dummy_error
-    end
     
     it 'should add an error to stored errors' do
       Errawr.register!(:dummy_error)
