@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ### Localizations
 
-Errawr uses [I18n](https://github.com/svenfuchs/i18n) for easily managing error localizations. Just define a locales using the ```errawr``` key.
+Errawr uses [I18n](https://github.com/svenfuchs/i18n) for easily managing error localizations. Just define a locale using the ```errawr``` key.
 
 ```yaml
 en:
@@ -57,8 +57,6 @@ end
 
 ### Raising Errors
 
-Then start raising hell!
-
 ```ruby
 begin
   Errawr.error!(:your_error)
@@ -67,16 +65,50 @@ rescue => e
 end
 ```
 
+### Managing Errors through Locale Files
+
+It's also possible to manage your errors and their metadata purely through locale files.
+
+```yaml
+en:
+  errawr:
+    your_error:
+      name: my error
+      error:
+        message: My awesome error message
+```
+
+Then just register and raise your exceptions like normal.
+
+```ruby
+Errawr.register!(:your_error)
+begin
+  Errawr.error!(:your_error)
+rescue => e
+  puts e.context[:name] # Will return "my error"
+end
+```
+
+### Overrides
+
 Want to override that metadata you registered? That's cool too.
 
 ```ruby
-Errawr.register!(:bad_request, { http_status: 400 })
+# #register! overrides metadata defined in the locale file
+Errawr.register!(:your_error, name: 'my infamous error')
 begin
-  Errawr.error!(:bad_request, { http_status: 500 })
+  Errawr.error!(:your_error)
 rescue => e
-  puts e.context[:http_status] # Will return 500
+  puts e.context[:name] # Will return "my infamous error"
 end
-```
+
+begin
+  # #error! metadata overrides both #register! and the locale file
+  Errawr.error!(:your_error, name: 'my very favorite error')
+rescue => e
+puts e.context[:name] # Will return "my very favorite error"
+end
+``` 
 
 ### Custom Error Classes
 
