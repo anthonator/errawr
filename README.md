@@ -89,9 +89,20 @@ rescue => e
 end
 ```
 
+**Note** the ```errawr.your_error.error.message``` locale key. This is the key used to define an error message when managing an error through a locale file.
+
 ### Overrides
 
 Want to override that metadata you registered? That's cool too.
+
+```yaml
+en:
+  errawr:
+    your_error:
+      name: my error
+      error:
+        message: My awesome error message
+```
 
 ```ruby
 # #register! overrides metadata defined in the locale file
@@ -106,9 +117,11 @@ begin
   # #error! metadata overrides both #register! and the locale file
   Errawr.error!(:your_error, name: 'my very favorite error')
 rescue => e
-puts e.context[:name] # Will return "my very favorite error"
+  puts e.context[:name] # Will return "my very favorite error"
 end
 ``` 
+
+**Note** Errawr reserves the ```error``` namespace under an error defined within a locale file. Any data defined under ```error``` will not show up in the raised errors context.
 
 ### Custom Error Classes
 
