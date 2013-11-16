@@ -121,8 +121,6 @@ rescue => e
 end
 ``` 
 
-**Note** Errawr reserves the ```error``` namespace under an error defined within a locale file. Any data defined under ```error``` will not show up in the raised errors context.
-
 ### Custom Error Classes
 
 Want to write a custom error class? No problem!
