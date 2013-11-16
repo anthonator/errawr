@@ -1,6 +1,6 @@
 # Errawr
 
-Define and raise localized errors like a baws!
+A framework for effectively defining and raising localized errors.
 
 [![Build Status](https://travis-ci.org/anthonator/errawr.png?branch=master)](https://travis-ci.org/anthonator/errawr) [![Dependency Status](https://gemnasium.com/anthonator/errawr.png)](https://gemnasium.com/anthonator/errawr) [![Coverage Status](https://coveralls.io/repos/anthonator/errawr/badge.png?branch=master)](https://coveralls.io/r/anthonator/errawr?branch=master) [![Code Climate](https://codeclimate.com/github/anthonator/errawr.png)](https://codeclimate.com/github/anthonator/errawr)
 

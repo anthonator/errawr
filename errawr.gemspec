@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Errawr::VERSION
   spec.authors       = ['Anthony Smith']
   spec.email         = ['anthony@sticksnleaves.com']
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Easily define and raise localized errors.}
+  spec.summary       = %q{A framework for effectively defining and raising localized errors.}
   spec.homepage      = 'http://www.github.com/anthonator/errawr'
   spec.license       = 'MIT'
 
