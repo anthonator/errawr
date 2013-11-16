@@ -1,3 +1,9 @@
 en:
   errawr:
     some_error: Some error has occurred
+    error_hash:
+      name: error_name
+      error:
+        message: Some hashed error has occurred
+    bad_error_hash:
+      name: bad_error

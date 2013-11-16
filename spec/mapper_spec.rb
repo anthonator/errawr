@@ -37,4 +37,33 @@ describe Errawr::Mapper do
       end
     end
   end
+  
+  describe 'error!' do
+    it 'should return custom context values from locale file' do
+      Errawr.register!(:error_hash)
+      begin
+        Errawr.error!(:error_hash)
+      rescue => e
+        e.context.include?(:name).should be_true
+      end
+    end
+    
+    it '#register! should override custom context values from locale file' do
+      Errawr.register!(:error_hash, name: 'register!_name')
+      begin
+        Errawr.error!(:error_hash)
+      rescue => e
+        e.context[:name].should == 'register!_name'
+      end
+    end
+    
+    it '#error! should override custom context values from #register! and locale file' do
+      Errawr.register!(:error_hash, name: 'register!_name')
+      begin
+        Errawr.error!(:error_hash, name: 'error!_name')
+      rescue => e
+        e.context[:name].should == 'error!_name'
+      end
+    end
+  end
 end
