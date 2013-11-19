@@ -59,7 +59,7 @@ end
 It's possible to add additional information to a registered error through metadata. Just specify a ```metadata``` hash when either registering:
 
 ```ruby
-Errawr.register!(:your\_error, metadata: { http\_status: 400 })
+Errawr.register!(:your_error, metadata: { http_status: 400 })
 begin
   Errawr.error!(:your_error)
 rescue => e
@@ -72,7 +72,7 @@ or throwing an error:
 ```ruby
 Errawr.register!(:your_error)
 begin
-  Errawr.error!(:your\_error, metadata: { http\_status: 400 })
+  Errawr.error!(:your_error, metadata: { http_status: 400 })
 rescue => e
   puts e.metadata[:http_status] # Will return 400
 end
@@ -114,7 +114,7 @@ en
 ```
 
 ```ruby
-Errawr.register!(:your\_error, error\_message: 'You did it wrong!')
+Errawr.register!(:your_error, error_message: 'You did it wrong!')
 begin
   Errawr.error!(:your_error)
 rescue => e
@@ -138,7 +138,7 @@ en:
 The ```#register!``` method will override the locale file.
 
 ```ruby
-Errawr.register!(:your\_error, message: 'Some other error message', metadata: { http\_status: 403 })
+Errawr.register!(:your_error, message: 'Some other error message', metadata: { http_status: 403 })
 begin
   Errawr.error!(:your_error)
 rescue => e
@@ -150,9 +150,9 @@ end
 The ```#error!``` method will override both ```#register!``` and the locale file.
 
 ```ruby
-Errawr.register!(:your\_error, message: 'Some other error message', metadata: { http\_status: 403 })
+Errawr.register!(:your_error, message: 'Some other error message', metadata: { http_status: 403 })
 begin
-  Errawr.error!(:your\_error, message: 'Yet another error message', metadata: { http\_status: 404 })
+  Errawr.error!(:your_error, message: 'Yet another error message', metadata: { http_status: 404 })
 rescue => e
   puts e.message # => Will return "Yet another error message"
   puts e.metadata[:http_status] # => Will return 404
@@ -171,7 +171,7 @@ class YourError < Errawr::Error
 end
 
 # Register your error with your custom class
-Errawr.register!(:your_error, { error: { base_class: YourError } })
+Errawr.register!(:your_error, base_class: YourError)
 
 # Do something with it
 begin
