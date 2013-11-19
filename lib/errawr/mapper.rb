@@ -15,9 +15,9 @@ module Errawr
     end
     
     def self.register!(key, options = {})
-      base_klass = options[:error] ? options[:error][:base_class] || Error : Error
+      base_klass = options[:base_class] || Error
       raise(ArgumentError, ':base_class must be a subclass of Errawr::Error') unless base_klass <= Error
-      klass = Class.new(base_klass).new(key, options.select { |k, v| ![:error].include?(k) })
+      klass = Class.new(base_klass).new(key, options)
       add(klass)
     end
     

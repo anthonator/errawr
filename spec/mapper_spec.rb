@@ -20,7 +20,7 @@ describe Errawr::Mapper do
   
   describe 'register!' do
     it 'should throw an error if base class is not a subclass of Errawr::Error' do
-      expect { Errawr.register!(:dummy_error, { error: { base_class: StandardError } }) }.to raise_error(ArgumentError)
+      expect { Errawr.register!(:dummy_error, base_class: StandardError) }.to raise_error(ArgumentError)
     end
     
     it 'should add an error to stored errors' do
@@ -28,41 +28,12 @@ describe Errawr::Mapper do
       Errawr::Mapper[:dummy_error].should_not be_nil
     end
     
-    it 'should not add :error options to context' do
-      Errawr.register!(:dummy_error, error: { name: :same_dummy_error })
+    it 'should not add :metadata options to context' do
+      Errawr.register!(:dummy_error, metadata: { name: :same_dummy_error })
       begin
         Errawr.error!(:dummy_error)
       rescue => e
-        e.context.include?(:error).should be_false
-      end
-    end
-  end
-  
-  describe 'error!' do
-    it 'should return custom context values from locale file' do
-      Errawr.register!(:error_hash)
-      begin
-        Errawr.error!(:error_hash)
-      rescue => e
-        e.context.include?(:name).should be_true
-      end
-    end
-    
-    it '#register! should override custom context values from locale file' do
-      Errawr.register!(:error_hash, name: 'register!_name')
-      begin
-        Errawr.error!(:error_hash)
-      rescue => e
-        e.context[:name].should == 'register!_name'
-      end
-    end
-    
-    it '#error! should override custom context values from #register! and locale file' do
-      Errawr.register!(:error_hash, name: 'register!_name')
-      begin
-        Errawr.error!(:error_hash, name: 'error!_name')
-      rescue => e
-        e.context[:name].should == 'error!_name'
+        e.metadata.include?(:error).should be_false
       end
     end
   end

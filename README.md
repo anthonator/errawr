@@ -44,17 +44,6 @@ Before you can raise an error you'll need to register it first.
 Errawr.register!(:your_error)
 ```
 
-It's also possible to pass in additional metadata when registering an error.
-
-```ruby
-Errawr.register!(:bad_request, { http_status: 400 })
-begin
-  Errawr.error!(:bad_request)
-rescue => e
-  puts e.context[:http_status]
-end
-```
-
 ### Raising Errors
 
 ```ruby
@@ -62,6 +51,30 @@ begin
   Errawr.error!(:your_error)
 rescue => e
   puts e.message # Localized error message defined in locale file
+end
+```
+
+### Metadata
+
+It's possible to add additional information to a registered error through metadata. Just specify a ```metadata``` hash when either registering:
+
+```ruby
+Errawr.register!(:your\_error, metadata: { http\_status: 400 })
+begin
+  Errawr.error!(:your_error)
+rescue => e
+  puts e.metadata[:http_status] # Will return 400
+end
+```
+
+or throwing an error:
+
+```ruby
+Errawr.register!(:your_error)
+begin
+  Errawr.error!(:your\_error, metadata: { http\_status: 400 })
+rescue => e
+  puts e.metadata[:http_status] # Will return 400
 end
 ```
 
@@ -73,9 +86,9 @@ It's also possible to manage your errors and their metadata purely through local
 en:
   errawr:
     your_error:
-      name: my error
-      error:
-        message: My awesome error message
+      message: My awesome error message
+      metadata:
+        http_status: 400
 ```
 
 Then just register and raise your exceptions like normal.
@@ -85,11 +98,29 @@ Errawr.register!(:your_error)
 begin
   Errawr.error!(:your_error)
 rescue => e
-  puts e.context[:name] # Will return "my error"
+  puts e.metadata[:http_status] # Will return 400
 end
 ```
 
-**Note** the ```errawr.your_error.error.message``` locale key. This is the key used to define an error message when managing an error through a locale file.
+### I18n Interpolation
+
+You can pass in parameter values to your localized error messages.
+
+```yaml
+en
+  errawr:
+  your_error:
+    message: "My awesome error message is: %{error_message}"
+```
+
+```ruby
+Errawr.register!(:your\_error, error\_message: 'You did it wrong!')
+begin
+  Errawr.error!(:your_error)
+rescue => e
+  puts e.message # Will return "My awesome error message is: You did it wrong!"
+end
+```
 
 ### Overrides
 
@@ -99,25 +130,32 @@ Want to override that metadata you registered? That's cool too.
 en:
   errawr:
     your_error:
-      name: my error
-      error:
-        message: My awesome error message
+      message: My awesome error message
+      metadata:
+        http_status: 400
 ```
 
+The ```#register!``` method will override the locale file.
+
 ```ruby
-# #register! overrides metadata defined in the locale file
-Errawr.register!(:your_error, name: 'my infamous error')
+Errawr.register!(:your\_error, message: 'Some other error message', metadata: { http\_status: 403 })
 begin
   Errawr.error!(:your_error)
 rescue => e
-  puts e.context[:name] # Will return "my infamous error"
+  puts e.message # => Will return "Some other error message"
+  puts e.metadata[:http_status] # => Will return 403
 end
+```
 
+The ```#error!``` method will override both ```#register!``` and the locale file.
+
+```ruby
+Errawr.register!(:your\_error, message: 'Some other error message', metadata: { http\_status: 403 })
 begin
-  # #error! metadata overrides both #register! and the locale file
-  Errawr.error!(:your_error, name: 'my very favorite error')
+  Errawr.error!(:your\_error, message: 'Yet another error message', metadata: { http\_status: 404 })
 rescue => e
-  puts e.context[:name] # Will return "my very favorite error"
+  puts e.message # => Will return "Yet another error message"
+  puts e.metadata[:http_status] # => Will return 404
 end
 ``` 
 

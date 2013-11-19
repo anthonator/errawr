@@ -2,8 +2,11 @@ en:
   errawr:
     some_error: Some error has occurred
     error_hash:
-      name: error_name
-      error:
-        message: Some hashed error has occurred
+      message: Some hashed error has occurred
+      metadata:
+        name: error_name
     bad_error_hash:
-      name: bad_error
+      metadata:
+        name: bad_error
+    interpolated_error:
+      message: "Some error has occurred: %{error_message}"

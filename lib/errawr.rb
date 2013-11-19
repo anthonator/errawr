@@ -9,6 +9,7 @@ module Errawr
   
   def self.error!(name, context = {})
     klass = Mapper[name] || Mapper[:unknown]
+    klass.metadata.merge!(context.delete(:metadata) || {})
     klass.context.merge!(context)
     raise klass
   end
