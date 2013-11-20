@@ -20,7 +20,5 @@ module Errawr
       klass = Class.new(base_klass).new(key, options)
       add(klass)
     end
-    
-    register!(:unknown)
   end
 end

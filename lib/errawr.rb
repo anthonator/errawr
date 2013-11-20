@@ -26,4 +26,6 @@ module Errawr
   end
   
   extend ClassMethods
+  
+  register!(:unknown)
 end
