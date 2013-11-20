@@ -6,6 +6,7 @@ require 'errawr/version'
 
 module Errawr
   I18n.load_path += Dir.glob('lib/errawr/locales/*.{rb,yml}')
+  I18n.reload!
   
   def self.error!(name, context = {})
     klass = Mapper[name] || Mapper[:unknown]
