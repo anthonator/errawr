@@ -5,7 +5,7 @@ require 'errawr/mapper'
 require 'errawr/version'
 
 module Errawr
-  I18n.load_path += Dir.glob('lib/errawr/locales/*.{rb,yml}')
+  I18n.load_path << "#{File.dirname(__FILE__)}/errawr/locales/en.yml"
   I18n.reload!
   
   def self.included(base)
@@ -24,5 +24,6 @@ module Errawr
       Mapper.register!(key, options)
     end
   end
+  
   extend ClassMethods
 end
