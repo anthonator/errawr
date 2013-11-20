@@ -36,5 +36,23 @@ describe Errawr::Mapper do
         e.metadata.include?(:error).should be_false
       end
     end
+    
+    it 'should return an overridden message for a non-hashed locale' do
+      Errawr.register!(:some_error, message: 'Overridden error message')
+      begin
+        Errawr.error!(:some_error)
+      rescue => e
+        e.message.should == 'Overridden error message'
+      end
+    end
+    
+    it 'should return an overridden message for a hashed locale' do
+      Errawr.register!(:error_hash, message: 'Overridden error message')
+      begin
+        Errawr.error!(:error_hash)
+      rescue => e
+        e.message.should == 'Overridden error message'
+      end
+    end
   end
 end

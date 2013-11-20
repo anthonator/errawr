@@ -60,5 +60,21 @@ describe Errawr do
         e.message.should == 'Some error has occurred: interpolated message'
       end
     end
+    
+    it 'should return an overridden message for a non-hashed locale' do
+      begin
+        Errawr.error!(:some_error, message: 'Overridden error message')
+      rescue => e
+        e.message.should == 'Overridden error message'
+      end
+    end
+    
+    it 'should return an overridden message for a hashed locale' do
+      begin
+        Errawr.error!(:error_hash, message: 'Overridden error message')
+      rescue => e
+        e.message.should == 'Overridden error message'
+      end
+    end
   end
 end

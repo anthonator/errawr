@@ -1,6 +1,6 @@
 module Errawr
   class Error < StandardError
-    attr_reader :key, :context, :metadata, :message
+    attr_reader :key, :context, :metadata
     
     def initialize(key = :unknown, context = {})
       @key = key
@@ -10,13 +10,18 @@ module Errawr
       process_message
     end
     
+    def message
+      @context[:message]
+    end
+    
     private
     def process_context(context)
       if @i18n.kind_of?(Hash)
         @context = @i18n.merge(context)
         @context.delete(:metadata)
+        @message_overridden = context.include?(:message)
       else
-        @context = {}
+        @context = context
       end
     end
     
@@ -29,10 +34,14 @@ module Errawr
     
     def process_message
       if @i18n.kind_of?(Hash)
-        key = 'errawr.' + @key.to_s + '.message'
-        @message = I18n.t(key, @context.merge({ default: I18n.t('errawr.unknown', @context) }))
+        if @message_overridden
+          @context[:message]
+        else
+          key = 'errawr.' + @key.to_s + '.message'
+          @context[:message] = I18n.t(key, @context.merge({ default: I18n.t('errawr.unknown', @context) }))
+        end
       else
-        @message = I18n.t('errawr.' + @key.to_s, @context)
+        @context[:message] = I18n.t('errawr.' + @key.to_s, @context) unless @context[:message]
       end
     end
   end

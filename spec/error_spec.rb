@@ -20,9 +20,4 @@ describe Errawr::Error do
     error = Errawr::Error.new(:bad_error_hash)
     error.message.should == 'An unknown error has occurred'
   end
-  
-  it 'should insert custom values into the context if I18n value is a hash' do
-    error = Errawr::Error.new(:error_hash)
-    error.metadata[:name].should == 'error_name'
-  end
 end
