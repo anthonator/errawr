@@ -15,8 +15,7 @@ module Errawr
   module ClassMethods
     def error!(name, context = {})
       klass = Mapper[name] || Mapper[:unknown]
-      klass.metadata.merge!(context.delete(:metadata) || {})
-      klass.context.merge!(context)
+      klass.update_context(context) unless context.empty?
       raise klass
     end
 

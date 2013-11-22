@@ -54,5 +54,23 @@ describe Errawr::Mapper do
         e.message.should == 'Overridden error message'
       end
     end
+    
+    it 'should override custom metadata values from locale file' do
+      Errawr.register!(:error_hash, metadata: { name: 'register!_name' })
+      begin
+        Errawr.error!(:error_hash)
+      rescue => e
+        e.metadata[:name].should == 'register!_name'
+      end
+    end
+    
+    it 'should interpolate locales' do
+      Errawr.register!(:interpolated_error, error_message: 'interpolated message')
+      begin
+        Errawr.error!(:interpolated_error)
+      rescue => e
+        e.message.should == 'Some error has occurred: interpolated message'
+      end
+    end
   end
 end

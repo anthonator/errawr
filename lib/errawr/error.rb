@@ -4,45 +4,40 @@ module Errawr
     
     def initialize(key = :unknown, context = {})
       @key = key
+      @context = context
+      @metadata = {}
       @i18n = I18n.t('errawr.' + @key.to_s)
-      process_context(context)
-      process_metadata(context)
-      process_message
+      update_context(@context)
     end
     
     def message
-      @context[:message]
+      process_message
+    end
+    
+    def update_context(context)
+      process_context(context)
     end
     
     private
     def process_context(context)
+      @message_overridden = context.include?(:message)
       if @i18n.kind_of?(Hash)
-        @context = @i18n.merge(context)
-        @context.delete(:metadata)
-        @message_overridden = context.include?(:message)
+        @context.merge!(@i18n.merge(context))
       else
-        @context = context
+        @context.merge!(context)
       end
-    end
-    
-    def process_metadata(context)
-      if @i18n.kind_of?(Hash)
-        context = @i18n.merge(context)
-      end
-      @metadata = context.fetch(:metadata, {})
+      @metadata.merge!(@context.delete(:metadata)) if @context.has_key?(:metadata)
     end
     
     def process_message
+      return @context[:message] if @message_overridden
       if @i18n.kind_of?(Hash)
-        if @message_overridden
-          @context[:message]
-        else
-          key = 'errawr.' + @key.to_s + '.message'
-          @context[:message] = I18n.t(key, @context.merge({ default: I18n.t('errawr.unknown', @context) }))
-        end
+        key = 'errawr.' + @key.to_s + '.message'
+        @context[:message] = I18n.t(key, @context.merge({ default: I18n.t('errawr.unknown', @context) }))
       else
         @context[:message] = I18n.t('errawr.' + @key.to_s, @context) unless @context[:message]
       end
+      @context[:message]
     end
   end
 end

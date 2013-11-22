@@ -34,30 +34,12 @@ describe Errawr do
       end
     end
     
-    it '#register! should override custom metadata values from locale file' do
-      Errawr.register!(:error_hash, metadata: { name: 'register!_name' })
-      begin
-        Errawr.error!(:error_hash)
-      rescue => e
-        e.metadata[:name].should == 'register!_name'
-      end
-    end
-    
     it 'should override custom metadata values from #register! and locale file' do
       Errawr.register!(:error_hash, metadata: { name: 'register!_name' })
       begin
         Errawr.error!(:error_hash, metadata: { name: 'error!_name' })
       rescue => e
         e.metadata[:name].should == 'error!_name'
-      end
-    end
-    
-    it 'should interpolate locales' do
-      Errawr.register!(:interpolated_error, error_message: 'interpolated message')
-      begin
-        Errawr.error!(:interpolated_error)
-      rescue => e
-        e.message.should == 'Some error has occurred: interpolated message'
       end
     end
     
@@ -74,6 +56,15 @@ describe Errawr do
         Errawr.error!(:error_hash, message: 'Overridden error message')
       rescue => e
         e.message.should == 'Overridden error message'
+      end
+    end
+    
+    it 'should pass in interpolated params' do
+      Errawr.register!(:interpolated_error)
+      begin
+        Errawr.error!(:interpolated_error, error_message: 'interpolated message')
+      rescue => e
+        e.message.should == 'Some error has occurred: interpolated message'
       end
     end
   end
