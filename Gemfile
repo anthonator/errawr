@@ -18,4 +18,5 @@ platforms :rbx do
   gem 'racc'
   gem 'rubinius-coverage', github: 'rubinius/rubinius-coverage'
   gem 'rubysl'
+  gem 'rubysl-json'
 end
