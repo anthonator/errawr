@@ -1,3 +1,3 @@
 module Errawr
-  VERSION = '1.1.6'
+  VERSION = '1.7.0'
 end
