@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Errawr do
   describe 'error!' do
     it 'should raise an Errawr::Error exception' do
-      Errawr.register!(:dummy_error)
       expect { Errawr.error!(:dummy_error) }.to raise_error(Errawr::Error)
     end
 
@@ -12,21 +11,20 @@ describe Errawr do
       begin
         Errawr.error!(:some_error)
       rescue => e
-        e.metadata[:name].should == 'custom_register!_name'
+        expect(e.metadata[:name]).to eq('custom_register!_name')
       end
     end
 
-    it 'should return custom metadata values using #error!' do
+    it 'should return custom metadata set with #register! using #error!' do
       Errawr.register!(:some_error, metadata: { name: 'custom_register!_name' })
       begin
         Errawr.error!(:some_error, metadata: { name: 'custom_error!_name' })
       rescue => e
-        e.metadata[:name].should == 'custom_error!_name'
+        expect(e.metadata[:name]).to eq('custom_error!_name')
       end
     end
 
     it 'should return custom metadata values from locale file' do
-      Errawr.register!(:error_hash)
       begin
         Errawr.error!(:error_hash)
       rescue => e
@@ -34,12 +32,12 @@ describe Errawr do
       end
     end
 
-    it 'should override custom metadata values from #register! and locale file' do
+    it 'should override custom metadata values from #register! and locale file using #error!' do
       Errawr.register!(:error_hash, metadata: { name: 'register!_name' })
       begin
         Errawr.error!(:error_hash, metadata: { name: 'error!_name' })
       rescue => e
-        e.metadata[:name].should == 'error!_name'
+        expect(e.metadata[:name]).to eq('error!_name')
       end
     end
 
@@ -47,7 +45,7 @@ describe Errawr do
       begin
         Errawr.error!(:some_error, message: 'Overridden error message')
       rescue => e
-        e.message.should == 'Overridden error message'
+        expect(e.message).to eq('Overridden error message')
       end
     end
 
@@ -55,16 +53,15 @@ describe Errawr do
       begin
         Errawr.error!(:error_hash, message: 'Overridden error message')
       rescue => e
-        e.message.should == 'Overridden error message'
+        expect(e.message).to eq('Overridden error message')
       end
     end
 
     it 'should pass in interpolated params' do
-      Errawr.register!(:interpolated_error)
       begin
         Errawr.error!(:interpolated_error, error_message: 'interpolated message')
       rescue => e
-        e.message.should == 'Some error has occurred: interpolated message'
+        expect(e.message).to eq('Some error has occurred: interpolated message')
       end
     end
   end

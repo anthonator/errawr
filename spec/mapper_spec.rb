@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe Errawr::Mapper do
   it 'should automatically register an unknown error' do
-    Errawr::Mapper.all[:unknown].should_not be_nil
+    expect(Errawr::Mapper.all[:unknown]).to_not eq(nil)
   end
 
   describe '[]' do
     it 'should return stored errors' do
-      Errawr::Mapper[:unknown].should_not be_nil
+      expect(Errawr::Mapper[:unknown]).to_not eq(nil)
     end
   end
 
   describe 'add' do
     it 'should add an error to stored errors' do
       Errawr::Mapper.add(DummyError.new)
-      Errawr::Mapper[:dummy_key].should_not be_nil
+      expect(Errawr::Mapper[:dummy_key]).to_not eq(nil)
     end
   end
 
@@ -25,51 +25,46 @@ describe Errawr::Mapper do
 
     it 'should add an error to stored errors' do
       Errawr.register!(:dummy_error)
-      Errawr::Mapper[:dummy_error].should_not be_nil
+      expect(Errawr::Mapper[:dummy_error]).to_not be_nil
     end
 
     it 'should not add :metadata options to context' do
-      Errawr.register!(:dummy_error, metadata: { name: :same_dummy_error })
       begin
-        Errawr.error!(:dummy_error)
+        Errawr.error!(:dummy_error, metadata: { name: :same_dummy_error })
       rescue => e
         expect(e.metadata).to_not include(:error)
       end
     end
 
     it 'should return an overridden message for a non-hashed locale' do
-      Errawr.register!(:some_error, message: 'Overridden error message')
       begin
-        Errawr.error!(:some_error)
+        Errawr.error!(:some_error, message: 'Overridden error message')
       rescue => e
-        e.message.should == 'Overridden error message'
+        expect(e.message).to eq('Overridden error message')
       end
     end
 
     it 'should return an overridden message for a hashed locale' do
-      Errawr.register!(:error_hash, message: 'Overridden error message')
       begin
-        Errawr.error!(:error_hash)
+        Errawr.error!(:error_hash, message: 'Overridden error message')
       rescue => e
-        e.message.should == 'Overridden error message'
+        expect(e.message).to eq('Overridden error message')
       end
     end
 
     it 'should override custom metadata values from locale file' do
-      Errawr.register!(:error_hash, metadata: { name: 'register!_name' })
       begin
-        Errawr.error!(:error_hash)
+        Errawr.error!(:error_hash, metadata: { name: 'register!_name' })
       rescue => e
-        e.metadata[:name].should == 'register!_name'
+        expect(e.metadata[:name]).to eq('register!_name')
       end
     end
 
     it 'should interpolate locales' do
-      Errawr.register!(:interpolated_error, error_message: 'interpolated message')
       begin
-        Errawr.error!(:interpolated_error)
+        Errawr.error!(:interpolated_error, error_message: 'interpolated message')
       rescue => e
-        e.message.should == 'Some error has occurred: interpolated message'
+        expect(e.message).to eq('Some error has occurred: interpolated message')
       end
     end
   end

@@ -22,7 +22,9 @@ Or install it yourself as:
 
 ### Localizations
 
-Errawr uses [I18n](https://github.com/svenfuchs/i18n) for easily managing error localizations. Just define a locale using the ```errawr``` key.
+Errawr uses [I18n](https://github.com/svenfuchs/i18n) for easily managing error
+localizations. Just define an error in a locale file. Make sure to use the
+```errawr``` key.
 
 ```yaml
 en:
@@ -34,14 +36,6 @@ Need to add more locale files? Use I18n's standard ```load_path```.
 
 ```ruby
 I18n.load_path += Dir.glob('lib/your_lib/locales/*.{rb,yml}')
-```
-
-### Registering Errors
-
-Before you can raise an error you'll need to register it first.
-
-```ruby
-Errawr.register!(:your_error)
 ```
 
 ### Raising Errors
@@ -56,21 +50,10 @@ end
 
 ### Metadata
 
-It's possible to add additional information to a registered error through metadata. Just specify a ```metadata``` hash when either registering:
+It's possible to add additional information to a registered error through
+metadata. Just specify a ```metadata``` hash when throwing an error:
 
 ```ruby
-Errawr.register!(:your_error, metadata: { http_status: 400 })
-begin
-  Errawr.error!(:your_error)
-rescue => e
-  puts e.metadata[:http_status] # Will return 400
-end
-```
-
-or throwing an error:
-
-```ruby
-Errawr.register!(:your_error)
 begin
   Errawr.error!(:your_error, metadata: { http_status: 400 })
 rescue => e
@@ -91,10 +74,9 @@ en:
         http_status: 400
 ```
 
-Then just register and raise your exceptions like normal.
+Then just raise your exceptions like normal.
 
 ```ruby
-Errawr.register!(:your_error)
 begin
   Errawr.error!(:your_error)
 rescue => e
@@ -114,9 +96,8 @@ en
 ```
 
 ```ruby
-Errawr.register!(:your_error, error_message: 'You did it wrong!')
 begin
-  Errawr.error!(:your_error)
+  Errawr.error!(:your_error, error_message: 'You did it wrong!')
 rescue => e
   puts e.message # Will return "My awesome error message is: You did it wrong!"
 end
@@ -124,7 +105,8 @@ end
 
 ### Overrides
 
-Want to override that metadata you registered? That's cool too.
+It's possible to override metadata stored in a locale file both globally and
+on a per use basis.
 
 ```yaml
 en:
@@ -157,7 +139,7 @@ rescue => e
   puts e.message # => Will return "Yet another error message"
   puts e.metadata[:http_status] # => Will return 404
 end
-``` 
+```
 
 ### Custom Error Classes
 
