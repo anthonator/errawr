@@ -20,50 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-### Localizations
+### Defining and Raising Errors
 
 Errawr uses [I18n](https://github.com/svenfuchs/i18n) for easily managing error
 localizations. Just define an error in a locale file. Make sure to use the
 ```errawr``` key.
-
-```yaml
-en:
-  errawr:
-    your_error: Your error message here
-```
-
-Need to add more locale files? Use I18n's standard ```load_path```.
-
-```ruby
-I18n.load_path += Dir.glob('lib/your_lib/locales/*.{rb,yml}')
-```
-
-### Raising Errors
-
-```ruby
-begin
-  Errawr.error!(:your_error)
-rescue => e
-  puts e.message # Localized error message defined in locale file
-end
-```
-
-### Metadata
-
-It's possible to add additional information to a registered error through
-metadata. Just specify a ```metadata``` hash when throwing an error:
-
-```ruby
-begin
-  Errawr.error!(:your_error, metadata: { http_status: 400 })
-rescue => e
-  puts e.metadata[:http_status] # Will return 400
-end
-```
-
-### Managing Errors through Locale Files
-
-It's also possible to manage your errors and their metadata purely through locale files.
 
 ```yaml
 en:
@@ -74,11 +35,30 @@ en:
         http_status: 400
 ```
 
-Then just raise your exceptions like normal.
+Then just raise your exception using the `#error!` method.
 
 ```ruby
 begin
   Errawr.error!(:your_error)
+rescue => e
+  puts e.metadata[:http_status] # Will return 400
+end
+```
+
+Need to add more locale files? Use I18n's standard ```load_path```.
+
+```ruby
+I18n.load_path += Dir.glob('lib/your_lib/locales/*.{rb,yml}')
+```
+
+### Metadata
+
+It's possible to add additional information to a registered error through
+metadata. Just specify a ```metadata``` hash when throwing an error:
+
+```ruby
+begin
+  Errawr.error!(:your_error, metadata: { http_status: 400 })
 rescue => e
   puts e.metadata[:http_status] # Will return 400
 end
