@@ -6,7 +6,6 @@ gemspec
 group :development do
   gem 'bundler'
   gem 'coveralls', require: false
-  gem 'rake'
 end
 
 group :test do
